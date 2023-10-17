@@ -22,11 +22,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    //Greeting("Android")
+                    HeroApp()
                 }
             }
         }
     }
+}
+
+@Composable
+fun HeroApp() {
+    HeroesScreen()
 }
 
 @Composable
