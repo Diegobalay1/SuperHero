@@ -2,6 +2,17 @@ package com.dlolhd.superhero.model
 
 import com.dlolhd.superhero.R
 
+interface HeroRepository {
+    suspend fun getAllHeroes(): List<Hero>
+}
+
+class HeroesRepositoryLocal : HeroRepository {
+    override suspend fun getAllHeroes(): List<Hero> {
+        return HeroesRepository.heroes
+    }
+
+}
+
 object HeroesRepository {
     val heroes = listOf(
         Hero(
