@@ -37,24 +37,26 @@ class HeroesViewModel(
         private set
 
     /**
+     * Call getAllHeroes() on init so we can display status immediately.
+     */
+    init {
+        getAllHeroes()
+    }
+
+    /**
      * Gets Hero information from the repository
      */
     fun getAllHeroes() {
         viewModelScope.launch {
             heroUiState = HeroUiState.Loading
-            delay(1_000)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(
-                    Build.VERSION_CODES.S) >= 7) {
-                heroUiState = try {
-                    val listResult = heroRepository.getAllHeroes()
-                    HeroUiState.Success(listResult)
-                } catch (e: IOException) {
-                    HeroUiState.Error
-                } catch (e: HttpException) {
-                    HeroUiState.Error
-                } catch (e: Exception) {
-                    HeroUiState.Error
-                }
+            delay(500)
+            heroUiState = try {
+                val listResult = heroRepository.getAllHeroes()
+                HeroUiState.Success(listResult)
+            } catch (e: IOException) {
+                HeroUiState.Error
+            } catch (e: Exception) {
+                HeroUiState.Error
             }
         }
     }

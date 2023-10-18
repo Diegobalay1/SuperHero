@@ -13,4 +13,8 @@
     <string name="description5">Effortlessly glides in to save the day</string>
     <string name="hero6">Dynamic Yasmine</string>
     <string name="description6">Ability to shift to any form and energize</string>
+    <string name="loading">Loading..</string>
+    <string name="connection_error">Connection Error..</string>
+    <string name="loading_failed">Failed to load</string>
+    <string name="retry">Retry</string>
 </resources>
