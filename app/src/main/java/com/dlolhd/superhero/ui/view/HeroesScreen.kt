@@ -162,24 +162,7 @@ fun ErrorScreen(
     }
 }
 
-/**
- * Composable that displays what the UI of the app looks like in light theme in the design tab.
- */
-@Preview
-@Composable
-fun HeroPreview() {
-    SuperHeroTheme(darkTheme = false) {
-        //HeroesListScreen()
-    }
-}
 
-@Preview
-@Composable
-fun HeroDarkThemePreview() {
-    SuperHeroTheme(darkTheme = true) {
-        //HeroesListScreen()
-    }
-}
 
 
 

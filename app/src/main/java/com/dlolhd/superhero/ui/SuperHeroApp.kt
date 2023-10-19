@@ -12,8 +12,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dlolhd.superhero.R
+import com.dlolhd.superhero.ui.theme.SuperHeroTheme
 import com.dlolhd.superhero.ui.view.HeroesViewModel
 import com.dlolhd.superhero.ui.view.SuperHeroScreen
 
@@ -48,3 +50,30 @@ fun SuperHeroTopAppBar(
         title = { Text(text = stringResource(id = R.string.app_name), style = MaterialTheme.typography.displayLarge) }
     )
 }
+
+/**
+ * Composable that displays what the UI of the app looks like in light theme in the design tab.
+ */
+@Preview
+@Composable
+fun HeroPreview() {
+    SuperHeroTheme(darkTheme = false) {
+        SuperHeroApp()
+    }
+}
+
+@Preview
+@Composable
+fun HeroDarkThemePreview() {
+    SuperHeroTheme(darkTheme = true) {
+        SuperHeroApp()
+    }
+}
+
+
+
+
+
+
+
+
