@@ -2,6 +2,15 @@ package com.dlolhd.superhero.ui.view
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring.DampingRatioLowBouncy
+import androidx.compose.animation.core.Spring.StiffnessVeryLow
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,12 +25,14 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,11 +41,9 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dlolhd.superhero.R
 import com.dlolhd.superhero.model.Hero
-import com.dlolhd.superhero.ui.theme.SuperHeroTheme
 
 
 @Composable
@@ -45,7 +54,8 @@ fun SuperHeroScreen(
 ) {
     when(heroUiState) {
         is HeroUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is HeroUiState.Success -> HeroesListScreen(heroes = heroUiState.heroes, modifier = modifier)
+        //is HeroUiState.Success -> HeroesListScreen(heroes = heroUiState.heroes, modifier = modifier)
+        is HeroUiState.Success -> HeroesListScreenFadeAnimation(heroes = heroUiState.heroes, modifier = modifier)
         is HeroUiState.Error -> ErrorScreen(retryAction = retryAction, modifier = modifier.fillMaxSize())
     }
 }
@@ -62,6 +72,49 @@ fun HeroesListScreen(
                 modifier = modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             )
+        }
+    }
+}
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun HeroesListScreenFadeAnimation(
+    heroes: List<Hero>,
+    modifier: Modifier = Modifier
+) {
+    val visibleState = remember {
+        MutableTransitionState(false).apply {
+            // Start the animation immediately.
+            targetState = true
+        }
+    }
+
+    // Fade in entry animation for the entire list
+    AnimatedVisibility(
+        visibleState = visibleState,
+        enter = fadeIn(
+            animationSpec = spring(dampingRatio = DampingRatioLowBouncy)
+        ),
+        exit = fadeOut(),
+        modifier = modifier
+    ) {
+        LazyColumn {
+            itemsIndexed(heroes) { index: Int, item: Hero ->
+                HeroItem(
+                    hero = item,
+                    modifier = modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                    // Animate each list item to slide in vertically
+                        .animateEnterExit(
+                            enter = slideInVertically(
+                                animationSpec = spring(
+                                    stiffness = StiffnessVeryLow,
+                                    dampingRatio = DampingRatioLowBouncy
+                                ),
+                                initialOffsetY = { it * (index + 1) } // staggered entrance
+                            )
+                        )
+                )
+            }
         }
     }
 }
